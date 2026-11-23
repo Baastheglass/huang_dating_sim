@@ -13,8 +13,9 @@ def handle_key_press(key, game_state):
 
 
 def handle_mouse_click(mouse_position, action_buttons, game_state):
-    # Phase 4: if a button was clicked, call game_state.perform_action(action_key).
-    pass
+    for button_rectangle, action_key in action_buttons:
+        if button_rectangle.collidepoint(mouse_position):
+            game_state.perform_action(action_key)
 
 
 def run_game():

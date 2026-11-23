@@ -1,7 +1,5 @@
 # Every line Jensen says. Data only, no logic.
 
-OPENING_LINE = "Jensen looks up from his keynote notes. \"Oh. Hello.\""
-
 # REACTION_LINES[action_key][reaction_level]
 # reaction_level is one of: "loves", "neutral", "dislikes"
 REACTION_LINES = {
