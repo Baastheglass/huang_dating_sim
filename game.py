@@ -15,6 +15,8 @@ def handle_key_press(key, game_state):
 def handle_mouse_click(mouse_position, action_buttons, game_state):
     for button_rectangle, action_key in action_buttons:
         if button_rectangle.collidepoint(mouse_position):
+            game_state.last_pressed_action_key = action_key
+            game_state.last_button_press_time = pygame.time.get_ticks()
             game_state.perform_action(action_key)
 
 

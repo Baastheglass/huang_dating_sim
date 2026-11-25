@@ -22,7 +22,6 @@ WHITE = (255, 255, 255)
 NVIDIA_GREEN = (118, 185, 0)
 DARK_GRAY = (40, 40, 40)
 PLACEHOLDER_BACKGROUND_COLOR = (60, 60, 90)
-PLACEHOLDER_JENSEN_COLOR = (20, 20, 20)
 
 # Action buttons (stacked on the right side of the screen)
 BUTTON_WIDTH = 460
@@ -49,3 +48,14 @@ DIALOGUE_BOX_MARGIN = 20
 DIALOGUE_FONT_SIZE = 30
 DIALOGUE_BOX_COLOR = BLACK
 DIALOGUE_TEXT_COLOR = WHITE
+
+# Jensen (stands bottom-aligned, left of the action buttons)
+JENSEN_IMAGE_PATH = "assets/jensen/OLD_MAN_GREEN_SURPRISED.png"
+JENSEN_HEIGHT = 620
+JENSEN_CENTER_X = 400
+
+# Rounded corners and button press animation
+DIALOGUE_BOX_CORNER_RADIUS = 30
+BUTTON_PRESSED_COLOR = NVIDIA_GREEN
+BUTTON_PRESS_SHRINK = 8  # pixels the button shrinks by at the start of the press
+BUTTON_PRESS_ANIMATION_MILLISECONDS = 200

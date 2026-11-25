@@ -3,7 +3,7 @@
 import random
 
 from settings import STARTING_ATTRACTION, MAX_ATTRACTION, PREFERENCE_MULTIPLIER, SHIFT_PENALTY
-from dialogue import REACTION_LINES, SHIFT_LINES
+from dialogue import OPENING_LINE, REACTION_LINES, SHIFT_LINES
 from races import RACES
 from actions import ACTIONS
 
@@ -25,10 +25,13 @@ class GameState:
         self.attraction = STARTING_ATTRACTION
         self.current_race_index = 0
         self.current_location_index = 0
-        self.jensen_line = None  # no dialogue until the player does something
+        self.jensen_line = OPENING_LINE
         # race name -> "loves" / "neutral" / "dislikes"
         self.jensen_preference_for_race = pick_jensen_preferences()
         self.is_game_over = False
+        # For the button press animation in drawing.py
+        self.last_pressed_action_key = None
+        self.last_button_press_time = 0
 
     def shift_race(self):
         self.current_race_index = (self.current_race_index + 1) % len(RACES)

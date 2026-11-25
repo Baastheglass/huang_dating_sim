@@ -1,5 +1,7 @@
 # Every line Jensen says. Data only, no logic.
 
+OPENING_LINE = "Hey there! Wanna go throw fistfuls of yogurt at pigeons?"
+
 # REACTION_LINES[action_key][reaction_level]
 # reaction_level is one of: "loves", "neutral", "dislikes"
 REACTION_LINES = {
