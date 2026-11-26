@@ -15,6 +15,7 @@ huang_dating_sim/
 ├── settings.py      # constants: screen size, colors, SHIFT_PENALTY, STARTING_ATTRACTION
 ├── game_state.py    # one object: current race, current location, attraction, last line spoken
 ├── drawing.py       # draws background, Jensen, attraction bar, dialogue box, buttons
+├── menus.py         # studio splash, main menu and settings screens
 ├── races.py         # list of races: name, portrait image
 ├── actions.py       # list of actions: name, base_charm
 ├── locations.py     # list of locations: name, background image, which actions are available

@@ -107,6 +107,14 @@ def get_font(font_size):
     return pygame.font.Font(None, font_size)
 
 
+def draw_button(screen, button_rectangle, text, fill_color=BUTTON_COLOR):
+    """One rounded button with centered text. Used by the action buttons and the menus."""
+    pygame.draw.rect(screen, fill_color, button_rectangle, border_radius=8)
+    pygame.draw.rect(screen, BUTTON_BORDER_COLOR, button_rectangle, width=2, border_radius=8)
+    button_text = get_font(BUTTON_FONT_SIZE).render(text, True, BUTTON_TEXT_COLOR)
+    screen.blit(button_text, button_text.get_rect(center=button_rectangle.center))
+
+
 def get_press_animation_progress(game_state, action_key):
     """0.0 right after the click, 1.0 when the animation ends. None if this button isn't animating."""
     if game_state.last_pressed_action_key != action_key:
@@ -136,11 +144,7 @@ def draw_action_buttons(screen, game_state):
             drawn_rectangle = button_rectangle.inflate(-shrink_amount * 2, -shrink_amount)
             fill_color = BUTTON_PRESSED_COLOR
 
-        pygame.draw.rect(screen, fill_color, drawn_rectangle, border_radius=8)
-        pygame.draw.rect(screen, BUTTON_BORDER_COLOR, drawn_rectangle, width=2, border_radius=8)
-
-        button_text = get_font(BUTTON_FONT_SIZE).render(ACTIONS[action_key]["button_text"], True, BUTTON_TEXT_COLOR)
-        screen.blit(button_text, button_text.get_rect(center=drawn_rectangle.center))
+        draw_button(screen, drawn_rectangle, ACTIONS[action_key]["button_text"], fill_color)
 
         # Clicks are checked against the full-size rectangle, not the shrunken one.
         action_buttons.append((button_rectangle, action_key))
