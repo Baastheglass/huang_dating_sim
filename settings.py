@@ -78,3 +78,11 @@ MENU_BUTTON_WIDTH = 320
 MENU_BUTTON_HEIGHT = 60
 MENU_BUTTON_SPACING = 20
 MENU_BUTTONS_TOP = 340
+
+# Asking about the chip formula wins at or above this attraction, and loses below it.
+ATTRACTION_NEEDED_FOR_FORMULA = 80
+DIALOGUE_TEXT_PADDING = 40  # gap between wrapped dialogue text and the box edge
+
+# Game over banner
+GAME_OVER_FONT_SIZE = 56
+MISSION_FAILED_COLOR = (230, 70, 70)

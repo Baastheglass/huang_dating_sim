@@ -67,6 +67,10 @@ def run_game():
                 if event.type in (pygame.KEYDOWN, pygame.MOUSEBUTTONDOWN):
                     current_screen = "main_menu"  # any key or click skips the splash
 
+            elif current_screen == "playing" and game_state.is_game_over:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    current_screen = "main_menu"
+
             elif current_screen == "playing":
                 if event.type == pygame.KEYDOWN:
                     handle_key_press(event.key, game_state)

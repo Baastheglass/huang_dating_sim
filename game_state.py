@@ -2,8 +2,14 @@
 
 import random
 
-from settings import STARTING_ATTRACTION, MAX_ATTRACTION, PREFERENCE_MULTIPLIER, SHIFT_PENALTY
-from dialogue import OPENING_LINE, REACTION_LINES, SHIFT_LINES
+from settings import (
+    STARTING_ATTRACTION,
+    MAX_ATTRACTION,
+    PREFERENCE_MULTIPLIER,
+    SHIFT_PENALTY,
+    ATTRACTION_NEEDED_FOR_FORMULA,
+)
+from dialogue import OPENING_LINE, REACTION_LINES, SHIFT_LINES, WIN_LINES, LOSE_LINES
 from races import RACES
 from actions import ACTIONS
 
@@ -29,6 +35,7 @@ class GameState:
         # race name -> "loves" / "neutral" / "dislikes"
         self.jensen_preference_for_race = pick_jensen_preferences()
         self.is_game_over = False
+        self.did_win = False
         # For the button press animation in drawing.py
         self.last_pressed_action_key = None
         self.last_button_press_time = 0
@@ -39,6 +46,10 @@ class GameState:
         self.jensen_line = random.choice(SHIFT_LINES)
 
     def perform_action(self, action_key):
+        if action_key == "ask_formula":
+            self.ask_for_chip_formula()
+            return
+
         current_race_name = RACES[self.current_race_index]["name"]
         reaction_level = self.jensen_preference_for_race[current_race_name]
 
@@ -52,6 +63,11 @@ class GameState:
         # Phase 5: move to the next location.
         pass
 
-    def check_game_over(self):
-        # Phase 6: win at MAX_ATTRACTION, lose at 0.
-        pass
+    def ask_for_chip_formula(self):
+        """Ends the game. Jensen hands it over only if he's attracted enough."""
+        self.is_game_over = True
+        self.did_win = self.attraction >= ATTRACTION_NEEDED_FOR_FORMULA
+        if self.did_win:
+            self.jensen_line = random.choice(WIN_LINES)
+        else:
+            self.jensen_line = random.choice(LOSE_LINES)

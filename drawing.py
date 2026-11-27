@@ -28,6 +28,9 @@ from settings import (
     BUTTON_PRESS_SHRINK,
     BUTTON_PRESS_ANIMATION_MILLISECONDS,
     DIALOGUE_BOX_CORNER_RADIUS,
+    DIALOGUE_TEXT_PADDING,
+    GAME_OVER_FONT_SIZE,
+    MISSION_FAILED_COLOR,
     MAX_ATTRACTION,
     WHITE,
     NVIDIA_GREEN,
@@ -76,9 +79,10 @@ def draw_attraction_bar(screen, game_state):
 
 
 def draw_race_label(screen, game_state):
-    """Show the current race in the top-right corner, level with the attraction bar."""
-    current_race_name = RACES[game_state.current_race_index]["name"]
-    race_text = get_font(BUTTON_FONT_SIZE).render(f"Race: {current_race_name}   (Shift to change)", True, WHITE)
+    """Show who you are right now in the top-right corner, level with the attraction bar."""
+    current_race = RACES[game_state.current_race_index]
+    label = f"{current_race['character_name']}, {current_race['age']} ({current_race['name']})   Shift to change"
+    race_text = get_font(BUTTON_FONT_SIZE).render(label, True, WHITE)
 
     race_label_box = pygame.Rect(0, 0, race_text.get_width() + 20, ATTRACTION_BAR_HEIGHT)
     race_label_box.topright = (SCREEN_WIDTH - ATTRACTION_BAR_LEFT, ATTRACTION_BAR_TOP)
@@ -97,14 +101,19 @@ def draw_dialogue_box(screen, game_state):
     pygame.draw.rect(screen, DIALOGUE_BOX_COLOR, dialogue_box, border_radius=DIALOGUE_BOX_CORNER_RADIUS)
     pygame.draw.rect(screen, NVIDIA_GREEN, dialogue_box, width=2, border_radius=DIALOGUE_BOX_CORNER_RADIUS)
 
-    # shortcut: one line of text, no word wrap; add wrapping if lines get longer than the box.
-    dialogue_text = get_font(DIALOGUE_FONT_SIZE).render(game_state.jensen_line, True, DIALOGUE_TEXT_COLOR)
+    # wraplength makes pygame split long lines onto several rows that fit inside the box
+    text_width_limit = dialogue_box.width - 2 * DIALOGUE_TEXT_PADDING
+    dialogue_text = get_font(DIALOGUE_FONT_SIZE).render(
+        game_state.jensen_line, True, DIALOGUE_TEXT_COLOR, None, text_width_limit
+    )
     screen.blit(dialogue_text, dialogue_text.get_rect(center=dialogue_box.center))
 
 
 @functools.cache  # build each font size once, not every frame
 def get_font(font_size):
-    return pygame.font.Font(None, font_size)
+    font = pygame.font.Font(None, font_size)
+    font.align = pygame.FONT_CENTER  # center each row of wrapped text
+    return font
 
 
 def draw_button(screen, button_rectangle, text, fill_color=BUTTON_COLOR):
@@ -158,4 +167,22 @@ def draw_everything(screen, game_state):
     draw_attraction_bar(screen, game_state)
     draw_race_label(screen, game_state)
     draw_dialogue_box(screen, game_state)
+    if game_state.is_game_over:
+        draw_game_over_banner(screen, game_state)
+        return []  # no buttons to click once the game is over
     return draw_action_buttons(screen, game_state)
+
+
+def draw_game_over_banner(screen, game_state):
+    """Takes the place of the action buttons after you ask about the chip formula."""
+    banner = pygame.Rect(BUTTONS_LEFT, BUTTONS_TOP, BUTTON_WIDTH, 160)
+    pygame.draw.rect(screen, DARK_GRAY, banner, border_radius=DIALOGUE_BOX_CORNER_RADIUS)
+    pygame.draw.rect(screen, NVIDIA_GREEN, banner, width=2, border_radius=DIALOGUE_BOX_CORNER_RADIUS)
+
+    result_text = "MISSION COMPLETE" if game_state.did_win else "MISSION FAILED"
+    result_color = NVIDIA_GREEN if game_state.did_win else MISSION_FAILED_COLOR
+    result = get_font(GAME_OVER_FONT_SIZE).render(result_text, True, result_color)
+    screen.blit(result, result.get_rect(center=(banner.centerx, banner.top + 60)))
+
+    hint = get_font(BUTTON_FONT_SIZE).render("Click to return to the main menu", True, WHITE)
+    screen.blit(hint, hint.get_rect(center=(banner.centerx, banner.top + 120)))
