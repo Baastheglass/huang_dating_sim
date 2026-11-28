@@ -2,8 +2,13 @@
 
 import pygame
 
-from drawing import draw_button, get_font
+from drawing import draw_button, get_font, get_jensen_image
 from settings import (
+    MENU_JENSEN_CENTER_X,
+    MENU_JENSEN_NOTE,
+    MENU_JENSEN_NOTE_CENTER,
+    MENU_JENSEN_ARROW_TIP,
+    MENU_ARROW_COLOR,
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     BLACK,
@@ -60,8 +65,28 @@ def draw_title(screen, title, subtitle):
     screen.blit(subtitle_text, subtitle_text.get_rect(center=(SCREEN_WIDTH // 2, 240)))
 
 
+def draw_arrow(screen, start, tip, color):
+    """A thick line from start to tip, with a triangle arrowhead at the tip."""
+    pygame.draw.line(screen, color, start, tip, 6)
+    direction = (pygame.Vector2(tip) - pygame.Vector2(start)).normalize()
+    side = pygame.Vector2(-direction.y, direction.x)  # points sideways from the line
+    arrowhead_base = pygame.Vector2(tip) - direction * 26
+    pygame.draw.polygon(screen, color, [tip, arrowhead_base + side * 14, arrowhead_base - side * 14])
+
+
+def draw_jensen_with_note(screen):
+    jensen_image = get_jensen_image()
+    screen.blit(jensen_image, jensen_image.get_rect(midbottom=(MENU_JENSEN_CENTER_X, SCREEN_HEIGHT)))
+
+    note = get_font(SUBTITLE_FONT_SIZE).render(MENU_JENSEN_NOTE, True, MENU_ARROW_COLOR)
+    note_rectangle = note.get_rect(center=MENU_JENSEN_NOTE_CENTER)
+    screen.blit(note, note_rectangle)
+    draw_arrow(screen, (note_rectangle.left - 10, note_rectangle.centery), MENU_JENSEN_ARROW_TIP, MENU_ARROW_COLOR)
+
+
 def draw_main_menu(screen):
     screen.fill(PLACEHOLDER_BACKGROUND_COLOR)
+    draw_jensen_with_note(screen)
     draw_title(screen, GAME_TITLE, GAME_SUBTITLE)
     return draw_menu_buttons(screen, [
         ("Play Game", "play_game"),

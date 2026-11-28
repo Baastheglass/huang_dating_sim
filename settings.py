@@ -61,7 +61,11 @@ BUTTON_PRESS_SHRINK = 8  # pixels the button shrinks by at the start of the pres
 BUTTON_PRESS_ANIMATION_MILLISECONDS = 200
 
 # Background music
-BACKGROUND_MUSIC_PATH = "assets/sounds/music.mp3"
+# Tried in order; the first file that loads is played.
+BACKGROUND_MUSIC_PATHS = [
+    "assets/sounds/music.mp3",
+    "assets/sounds/music_untagged.mp3",  # same song without its ID3 tag, in case the tag fails to load
+]
 BACKGROUND_MUSIC_VOLUME = 0.5  # 0.0 (silent) to 1.0 (full)
 
 # Studio splash screen
@@ -86,3 +90,10 @@ DIALOGUE_TEXT_PADDING = 40  # gap between wrapped dialogue text and the box edge
 # Game over banner
 GAME_OVER_FONT_SIZE = 56
 MISSION_FAILED_COLOR = (230, 70, 70)
+
+# Jensen on the main menu, with the arrow and note pointing at him
+MENU_JENSEN_CENTER_X = 230
+MENU_JENSEN_NOTE = "We can't draw, please pretend this is Jensen Huang"
+MENU_JENSEN_NOTE_CENTER = (890, 665)
+MENU_JENSEN_ARROW_TIP = (410, 600)
+MENU_ARROW_COLOR = (255, 215, 0)

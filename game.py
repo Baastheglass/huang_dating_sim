@@ -13,7 +13,7 @@ from settings import (
     SCREEN_HEIGHT,
     FRAMES_PER_SECOND,
     WINDOW_TITLE,
-    BACKGROUND_MUSIC_PATH,
+    BACKGROUND_MUSIC_PATHS,
     BACKGROUND_MUSIC_VOLUME,
     STUDIO_SPLASH_MILLISECONDS,
 )
@@ -41,15 +41,26 @@ def handle_action_click(action_key, game_state):
     game_state.perform_action(action_key)
 
 
+def start_background_music():
+    """Play the first music file that loads. If none work (bad file, no sound device), play nothing."""
+    for music_path in BACKGROUND_MUSIC_PATHS:
+        try:
+            pygame.mixer.music.load(music_path)
+            pygame.mixer.music.set_volume(BACKGROUND_MUSIC_VOLUME)
+            pygame.mixer.music.play(loops=-1)  # -1 means loop forever
+            return
+        except pygame.error as music_error:
+            print(f"Could not play {music_path}: {music_error}")
+    print("No background music will play.")
+
+
 def run_game():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption(WINDOW_TITLE)
     clock = pygame.time.Clock()
 
-    pygame.mixer.music.load(BACKGROUND_MUSIC_PATH)
-    pygame.mixer.music.set_volume(BACKGROUND_MUSIC_VOLUME)
-    pygame.mixer.music.play(loops=-1)  # -1 means loop forever
+    start_background_music()
     is_music_on = True
 
     current_screen = "studio_splash"
@@ -90,7 +101,9 @@ def run_game():
                     is_running = False
                 elif button_key == "toggle_music":
                     is_music_on = not is_music_on
-                    if is_music_on:
+                    if not pygame.mixer.get_init():
+                        pass  # no working audio, so there is nothing to pause or unpause
+                    elif is_music_on:
                         pygame.mixer.music.unpause()
                     else:
                         pygame.mixer.music.pause()
